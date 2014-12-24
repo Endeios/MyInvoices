@@ -28,7 +28,7 @@
 	<title>
 		<band height="79" splitType="Stretch">
 			<textField>
-				<reportElement x="125" y="20" width="100" height="20" uuid="9084cdb9-ffc0-4da7-988c-493b00940291"/>
+				<reportElement x="125" y="20" width="500" height="20" uuid="9084cdb9-ffc0-4da7-988c-493b00940291"/>
 				<textFieldExpression><![CDATA[""+$F{customer}]]></textFieldExpression>
 			</textField>
 			<textField>

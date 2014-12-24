@@ -16,6 +16,10 @@ repositories {
 	maven{
 		url = "file:///"+System.properties['user.home']+"/.m2/repository/"
 	}
+    maven{
+        url = "http://jaspersoft.artifactoryonline.com/jaspersoft/third-party-ce-artifacts/"
+    }
+
 }
 
 
@@ -37,6 +41,8 @@ dependencies {
     compile 'org.apache.commons:commons-lang3:3.3.2'
     compile 'org.apache.pdfbox:pdfbox:1.8.8'
     compile 'io.endeios:businessBackEnd:0.1'
+    compile 'net.sf.jasperreports:jasperreports:6.0.0'
+
 
     compile files("${javaHome}/jre/lib/ext/jfxrt.jar")
 

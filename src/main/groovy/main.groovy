@@ -6,7 +6,7 @@ import javafx.fxml.FXMLLoader
 import groovy.transform.Canonical
 
 import java.awt.print.*;
-//import javafx.print.* //javafx print is the same as awt anyway...
+//import javafx.print.* //javafx print is the same as awt anyway... also pdfbox has not support till today
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.pdmodel.PDPageable
 
@@ -41,6 +41,13 @@ start{
 				boolean doPrint = pj.printDialog();
 				//boolean doPrint = pj.showPrintDialog(stage)
 				if(doPrint){
+                  InputStream input = new FileInputStream(new File("/home/bveronesi/reportBusiness.jrxml"));
+                  JasperDesign design = JRXmlLoader.load(input);
+                  JasperReport report = JasperCompileManager.compileReport(design);
+                  def data = new JRBeanCollectionDataSource([test.invoice])
+                  println data
+                  JasperPrint myPrint = JasperFillManager.fillReport(report,[:] ,data)
+
 				  println pj					
 				  PDDocument pdf = PDDocument.load("/home/bruno/Scaricati/pragmatic-guide-to-sass_p1_0.pdf")
 				  pj.setPageable(new PDPageable(pdf, pj))

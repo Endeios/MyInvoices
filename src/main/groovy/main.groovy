@@ -10,6 +10,13 @@ import java.awt.print.*;
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.pdmodel.PDPageable
 
+import net.sf.jasperreports.engine.*
+import net.sf.jasperreports.engine.design.JasperDesign
+import net.sf.jasperreports.engine.xml.JRXmlLoader
+import net.sf.jasperreports.engine.export.*
+import net.sf.jasperreports.engine.data.*
+
+
 import business.domain.*
 import business.BusinessApp
 
@@ -21,6 +28,8 @@ class MyTab{
 	List<String> cols
 	def crud_service;
 }
+
+def cl = Thread.currentThread().getContextClassLoader()
 
 def tabs = [
 	new MyTab(title:"Customer",label:"Customer's data",cols:["name","email"],crud_service:business.BusinessApp.getCustomerService()),
@@ -37,21 +46,26 @@ start{
                         menu("File"){
                             menuItem("Print Invoices",onAction:{evt->
                                 PrinterJob pj = PrinterJob.getPrinterJob();
-                                //PrinterJob pj = PrinterJob.createPrinterJob();
+                                //PrinterJob pj = PrinterJob.createPrinterJob();//JavaFx
                                 boolean doPrint = pj.printDialog();
-                                //boolean doPrint = pj.showPrintDialog(stage)
+                                //boolean doPrint = pj.showPrintDialog(stage)//JavaFx
                                 if(doPrint){
-                                    InputStream input = new FileInputStream(new File("/home/bveronesi/reportBusiness.jrxml"));
+                                    InputStream input = cl.getResourceAsStream("reportBusiness.jrxml")
                                     JasperDesign design = JRXmlLoader.load(input);
                                     JasperReport report = JasperCompileManager.compileReport(design);
-                                    def data = new JRBeanCollectionDataSource([test.invoice])
+                                    def data = new JRBeanCollectionDataSource(business.BusinessApp.getInvoiceService().findAll())
                                     println data
                                     JasperPrint myPrint = JasperFillManager.fillReport(report,[:] ,data)
-    
-                                    println pj					
-                                    PDDocument pdf = PDDocument.load("/home/bruno/Scaricati/pragmatic-guide-to-sass_p1_0.pdf")
+                                    def output = new ByteArrayOutputStream()
+                                    
+                                    JasperExportManager.exportReportToPdfStream(myPrint, output);
+                                    def pdInput = new ByteArrayInputStream(output.toByteArray())
+                                    println pj
+                                    println output
+                                    PDDocument pdf = PDDocument.load(pdInput)
+
                                     pj.setPageable(new PDPageable(pdf, pj))
-                                    pj.setJobName("InvoicesXXXXXXX");
+                                    pj.setJobName("Invoices");
                                     try {
                                         pj.print();
                                     } catch (PrinterException e) {

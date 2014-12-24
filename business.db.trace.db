@@ -1,0 +1,6 @@
+12-20 22:32:39 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLException: Table "CUSTOMER" not found; SQL statement:
+insert into Customer (id, email, name) values (null, ?, ?) [42102-183]
+12-20 22:32:39 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLException: Table "CUSTOMER" not found; SQL statement:
+insert into Customer (id, email, name) values (null, ?, ?) [42102-183]

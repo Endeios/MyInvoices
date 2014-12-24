@@ -1,0 +1,101 @@
+apply plugin:'groovy'
+apply plugin:'maven'
+apply plugin:'application'
+
+project.ext.set('javaHome', System.env['JAVA_HOME'])
+
+project.group = "io.endeios"
+project.version = "0.1"
+
+mainClassName = "io.endeios.main"
+
+
+
+repositories { 
+	mavenCentral()
+	maven{
+		url = "file:///"+System.properties['user.home']+"/.m2/repository/"
+	}
+}
+
+
+
+configurations {
+       shell 
+}
+
+
+dependencies {
+    compile 'org.codehaus.groovy:groovy-all:2.3.8'
+    compile 'org.apache.xmlrpc:xmlrpc-client:3.1.3'
+    compile 'org.codehaus.groovyfx:groovyfx:0.4.0'
+    compile 'org.postgresql:postgresql:9.3-1101-jdbc41'
+    compile "org.codehaus.gpars:gpars:1.2.1"
+    compile 'org.slf4j:slf4j-api:1.7.7'
+    compile 'org.slf4j:slf4j-simple:1.7.7'
+    compile 'net.java.openjfx.backport:openjfx-78-backport:1.8.0-ea-b96.1' 
+    compile 'org.apache.commons:commons-lang3:3.3.2'
+    compile 'org.apache.pdfbox:pdfbox:1.8.8'
+    compile 'io.endeios:businessBackEnd:0.1'
+
+    compile files("${javaHome}/jre/lib/ext/jfxrt.jar")
+
+    testCompile "junit:junit:4.11"
+    shell 'commons-cli:commons-cli:1.2'
+    shell('jline:jline:2.11') {
+        exclude(group: 'junit', module: 'junit')
+    }
+    shell 'org.codehaus.groovy:groovy-groovysh:2.3.8'
+
+}
+
+task runTool(type: JavaExec) {
+    main = "io.endeios.main"
+    classpath sourceSets.main.runtimeClasspath
+}
+
+
+task wrap(type:Wrapper, description:"create a gradlew") {
+    gradleVersion = '2.1'
+}
+
+
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: "file:///"+System.properties['user.home']+"/.m2/repository/")
+            pom.project {
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        distribution 'repo'
+                    }
+                }
+            }
+            pom.artifactId = "myInvoices"
+            pom.packaging = "jar"
+        }
+    }
+}
+
+
+task(shell, dependsOn: 'classes') << {
+    def classpath = sourceSets.main.runtimeClasspath + configurations.shell
+    def command = [
+        'java',
+        '-cp', classpath.collect().join(':'),
+        'org.codehaus.groovy.tools.shell.Main',
+        '--color',
+        '--terminal', 'unix']
+    def proc = new ProcessBuilder(command)
+        .redirectOutput(ProcessBuilder.Redirect.INHERIT)
+        .redirectInput(ProcessBuilder.Redirect.INHERIT)
+        .redirectError(ProcessBuilder.Redirect.INHERIT)
+        .start()
+    proc.waitFor()
+}
+
+
+

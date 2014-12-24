@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d42d083b-2327-4679-9e4b-f07d37489444">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<subDataset name="dataset1" uuid="bbe21360-e95e-4158-94c3-708d3ed77613">
+		<field name="name" class="java.lang.String"/>
+		<field name="price" class="java.lang.String"/>
+	</subDataset>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/home/bveronesi/"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="customer" class="business.domain.Customer">
+		<fieldDescription><![CDATA[customer]]></fieldDescription>
+	</field>
+	<field name="date" class="java.util.Date">
+		<fieldDescription><![CDATA[date]]></fieldDescription>
+	</field>
+	<field name="items" class="java.util.List">
+		<fieldDescription><![CDATA[items]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<textField>
+				<reportElement x="125" y="20" width="100" height="20" uuid="9084cdb9-ffc0-4da7-988c-493b00940291"/>
+				<textFieldExpression><![CDATA[""+$F{customer}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="590" y="20" width="100" height="20" uuid="2b778917-9657-4cdb-942f-6c7f3d23bf9c"/>
+				<textFieldExpression><![CDATA[$F{date}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="25" y="20" width="100" height="20" uuid="e9258b64-36a7-4b83-930d-adacc655ad26"/>
+				<text><![CDATA[Customer]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="490" y="20" width="100" height="20" uuid="53f5b626-00fb-4730-b93a-9215ddabcfb7"/>
+				<text><![CDATA[Date]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="280" splitType="Stretch">
+			<componentElement>
+				<reportElement x="0" y="0" width="752" height="20" uuid="c7785732-0a4a-48b1-8105-a90dc4c4a6d1"/>
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+					<datasetRun subDataset="dataset1" uuid="2e745b47-1b9e-4834-801c-4b2634afef2b">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{items})]]></dataSourceExpression>
+					</datasetRun>
+					<jr:listContents height="20" width="752">
+						<textField>
+							<reportElement x="71" y="0" width="100" height="20" uuid="ac91ab37-4db5-4e26-ad70-62c9ce09d251"/>
+							<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="171" y="0" width="100" height="20" uuid="96cb809d-0b2a-49ac-93c9-0cad04aa714d"/>
+							<textFieldExpression><![CDATA[$F{price}]]></textFieldExpression>
+						</textField>
+					</jr:listContents>
+				</jr:list>
+			</componentElement>
+		</band>
+	</pageHeader>
+</jasperReport>
